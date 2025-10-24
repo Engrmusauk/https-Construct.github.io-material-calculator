@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building Materials Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.2rem;
+        }
+        
+        .calculators-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        
+        .calculator {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .calculator:hover {
+            transform: translateY(-5px);
+        }
+        
+        .calculator-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f1f1f1;
+        }
+        
+        .calculator-icon {
+            background: #3498db;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .calculator-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+        
+        input:focus, select:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        
+        button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        button i {
+            margin-right: 8px;
+        }
+        
+        .result {
+            margin-top: 25px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            display: none;
+        }
+        
+        .result h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .result h3 i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        th {
+            background-color: #e8f4fc;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        
+        tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .highlight {
+            background-color: #e8f4fc;
+            font-weight: 600;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .calculators-container {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Building Materials Calculator</h1>
+            <p class="subtitle">Estimate materials for construction projects with precision</p>
+        </header>
+        
+        <div class="calculators-container">
+            <div class="calculator">
+                <div class="calculator-header">
+                    <div class="calculator-icon">
+                        <i class="fas fa-bricks"></i>
+                    </div>
+                    <h2 class="calculator-title">Brickwork Calculator</h2>
+                </div>
+                
+                <div class="input-group">
+                    <label for="bwVol">Volume (Cft)</label>
+                    <input type="number" id="bwVol" value="100" min="1">
+                </div>
+                
+                <div class="input-group">
+                    <label for="bwRatio">Mortar Ratio (Cement : Sand)</label>
+                    <select id="bwRatio">
+                        <option value="1:2">1:2</option>
+                        <option value="1:3">1:3</option>
+                        <option value="1:4">1:4</option>
+                        <option value="1:5">1:5</option>
+                        <option value="1:6" selected>1:6</option>
+                        <option value="1:7">1:7</option>
+                        <option value="1:8">1:8</option>
+                    </select>
+                </div>
+                
+                <button onclick="calcBrickwork()">
+                    <i class="fas fa-calculator"></i> Calculate
+                </button>
+                
+                <div class="result" id="bwResult">
+                    <h3><i class="fas fa-clipboard-list"></i> Brickwork Materials</h3>
+                    <table>
+                        <tr>
+                            <th>Material</th>
+                            <th>Quantity</th>
+                        </tr>
+                        <tr>
+                            <td>Bricks (9"×4.5"×3")</td>
+                            <td id="bricksCount">-</td>
+                        </tr>
+                        <tr>
+                            <td>Cement (Bags)</td>
+                            <td id="cementBricks">-</td>
+                        </tr>
+                        <tr>
+                            <td>Sand (Cft)</td>
+                            <td id="sandBricks">-</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="calculator">
+                <div class="calculator-header">
+                    <div class="calculator-icon">
+                        <i class="fas fa-trowel"></i>
+                    </div>
+                    <h2 class="calculator-title">Plaster Calculator</h2>
+                </div>
+                
+                <div class="input-group">
+                    <label for="plArea">Area (Sft)</label>
+                    <input type="number" id="plArea" value="100" min="1">
+                </div>
+                
+                <div class="input-group">
+                    <label for="plThickness">Thickness</label>
+                    <select id="plThickness">
+                        <option value="0.375">3/8 inch</option>
+                        <option value="0.5" selected>1/2 inch</option>
+                        <option value="0.75">3/4 inch</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="plRatio">Mix Ratio (Cement : Sand)</label>
+                    <select id="plRatio">
+                        <option value="1:2">1:2</option>
+                        <option value="1:3">1:3</option>
+                        <option value="1:4" selected>1:4</option>
+                        <option value="1:5">1:5</option>
+                        <option value="1:6">1:6</option>
+                        <option value="1:7">1:7</option>
+                        <option value="1:8">1:8</option>
+                    </select>
+                </div>
+                
+                <button onclick="calcPlaster()">
+                    <i class="fas fa-calculator"></i> Calculate
+                </button>
+                
+                <div class="result" id="plResult">
+                    <h3><i class="fas fa-clipboard-list"></i> Plaster Materials</h3>
+                    <table>
+                        <tr>
+                            <th>Material</th>
+                            <th>Quantity</th>
+                        </tr>
+                        <tr>
+                            <td>Cement (Bags)</td>
+                            <td id="cementPlaster">-</td>
+                        </tr>
+                        <tr>
+                            <td>Sand (Cft)</td>
+                            <td id="sandPlaster">-</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="calculator">
+                <div class="calculator-header">
+                    <div class="calculator-icon">
+                        <i class="fas fa-hard-hat"></i>
+                    </div>
+                    <h2 class="calculator-title">Concrete Calculator</h2>
+                </div>
+                
+                <div class="input-group">
+                    <label for="ccVol">Volume (Cft)</label>
+                    <input type="number" id="ccVol" value="100" min="1">
+                </div>
+                
+                <div class="input-group">
+                    <label for="ccRatio">Mix Ratio (Cement : Sand : Aggregate)</label>
+                    <select id="ccRatio">
+                        <option value="1:1.5:3">1:1.5:3</option>
+                        <option value="1:2:3">1:2:3</option>
+                        <option value="1:2:4" selected>1:2:4</option>
+                        <option value="1:3:6">1:3:6</option>
+                        <option value="1:4:8">1:4:8</option>
+                    </select>
+                </div>
+                
+                <button onclick="calcConcrete()">
+                    <i class="fas fa-calculator"></i> Calculate
+                </button>
+                
+                <div class="result" id="ccResult">
+                    <h3><i class="fas fa-clipboard-list"></i> Concrete Materials</h3>
+                    <table>
+                        <tr>
+                            <th>Material</th>
+                            <th>Quantity</th>
+                        </tr>
+                        <tr>
+                            <td>Cement (Bags)</td>
+                            <td id="cementConcrete">-</td>
+                        </tr>
+                        <tr>
+                            <td>Sand (Cft)</td>
+                            <td id="sandConcrete">-</td>
+                        </tr>
+                        <tr>
+                            <td>Aggregate (Cft)</td>
+                            <td id="aggregateConcrete">-</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Building Materials Calculator &copy; 2023 | Based on Standard Construction Material Calculations</p>
+        </footer>
+    </div>
+
+    <script>
+        // Constants
+        const BRICKS_PER_100CFT = 1350;
+        const BAG_VOLUME_CFT = 1.25;
+        const DRY_VOL_FACTOR = 1.27;
+        
+        // Helper function to round numbers
+        function round(x, n = 2) {
+            return Number.parseFloat(x).toFixed(n);
+        }
+        
+        // Brickwork calculation
+        function calcBrickwork() {
+            const volume = parseFloat(document.getElementById('bwVol').value);
+            const ratio = document.getElementById('bwRatio').value;
+            
+            // Data from the PDF table
+            const data = {
+                "1:2": {cement: 8, sand: 20},
+                "1:3": {cement: 6, sand: 22.5},
+                "1:4": {cement: 4.8, sand: 24},
+                "1:5": {cement: 4, sand: 25},
+                "1:6": {cement: 3.4, sand: 25.7},
+                "1:7": {cement: 3, sand: 26.5},
+                "1:8": {cement: 2.66, sand: 28.67}
+            };
+            
+            const factor = volume / 100;
+            const bricks = BRICKS_PER_100CFT * factor;
+            const cement = data[ratio].cement * factor;
+            const sand = data[ratio].sand * factor;
+            
+            // Update the result table
+            document.getElementById('bricksCount').textContent = Math.round(bricks);
+            document.getElementById('cementBricks').textContent = round(cement);
+            document.getElementById('sandBricks').textContent = round(sand);
+            
+            // Show the result section
+            document.getElementById('bwResult').style.display = 'block';
+        }
+        
+        // Plaster calculation
+        function calcPlaster() {
+            const area = parseFloat(document.getElementById('plArea').value);
+            const thickness = parseFloat(document.getElementById('plThickness').value);
+            const ratio = document.getElementById('plRatio').value;
+            
+            // Calculate wet volume
+            const wetVol = area * (thickness / 12);
+            
+            // Calculate dry volume
+            const dryVol = wetVol * DRY_VOL_FACTOR;
+            
+            // Split ratio
+            const parts = ratio.split(':').map(Number);
+            const totalParts = parts[0] + parts[1];
+            
+            // Calculate cement and sand volumes
+            const cementVol = dryVol * (parts[0] / totalParts);
+            const sandVol = dryVol * (parts[1] / totalParts);
+            
+            // Convert cement volume to bags
+            const cementBags = cementVol / BAG_VOLUME_CFT;
+            
+            // Update the result table
+            document.getElementById('cementPlaster').textContent = round(cementBags, 2);
+            document.getElementById('sandPlaster').textContent = round(sandVol, 2);
+            
+            // Show the result section
+            document.getElementById('plResult').style.display = 'block';
+        }
+        
+        // Concrete calculation
+        function calcConcrete() {
+            const volume = parseFloat(document.getElementById('ccVol').value);
+            const ratio = document.getElementById('ccRatio').value;
+            
+            // Split ratio
+            const parts = ratio.split(':').map(Number);
+            const totalParts = parts[0] + parts[1] + parts[2];
+            
+            // Calculate dry volume (using standard factor for concrete)
+            const dryVol = volume * 1.54;
+            
+            // Calculate material volumes
+            const cementVol = dryVol * (parts[0] / totalParts);
+            const sandVol = dryVol * (parts[1] / totalParts);
+            const aggregateVol = dryVol * (parts[2] / totalParts);
+            
+            // Convert cement volume to bags
+            const cementBags = cementVol / BAG_VOLUME_CFT;
+            
+            // Update the result table
+            document.getElementById('cementConcrete').textContent = round(cementBags, 1);
+            document.getElementById('sandConcrete').textContent = round(sandVol, 1);
+            document.getElementById('aggregateConcrete').textContent = round(aggregateVol, 1);
+            
+            // Show the result section
+            document.getElementById('ccResult').style.display = 'block';
+        }
+        
+        // Initialize with default calculations
+        window.onload = function() {
+            calcBrickwork();
+            calcPlaster();
+            calcConcrete();
+        };
+    </script>
+</body>
+</html>
